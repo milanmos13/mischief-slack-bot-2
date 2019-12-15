@@ -1,4 +1,4 @@
-from database_connection import *
+from winter_db import *
 from utils import *
 from slack_api import *
 from slack_response import *
@@ -6,7 +6,7 @@ from datetime import datetime
 
 class WreckAWinter:
 
-	def __init__(self, json_data):
+    def __init__(self, json_data):
         self._event = json_data['event']
         self._repeat = False
 
