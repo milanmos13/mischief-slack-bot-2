@@ -13,7 +13,6 @@ app = Flask(__name__)
 #CREATE TABLE winter_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, workout_score numeric(4, 1), last_post DATE, slack_id INT, last_time BIGINT)
 
 def add_num_posts(mention_id, event_time, name):
-    # "UPDATE winter_data SET num_posts=num_posts+1, WHERE name = '_____' AND last_time != "
     try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -25,14 +24,13 @@ def add_num_posts(mention_id, event_time, name):
             port=url.port
         )
         cursor = conn.cursor()
-        # get all of the people whose workout scores are greater than -1 (any non players have a workout score of -1)
-        # cursor.execute(sql.SQL(
-        #     "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
-        #     [mention_id[0]])
+        cursor.execute(sql.SQL(
+            "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
+            [mention_id[0]])
         if cursor.rowcount == 0:
             cursor.execute(sql.SQL("INSERT INTO winter_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time])
-            send_debug_message("%s first time posting" % name)
+            send_debug_message("%s is new to Wreck" % name)
         conn.commit()
         cursor.close()
         conn.close()
@@ -40,7 +38,6 @@ def add_num_posts(mention_id, event_time, name):
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(error)
         return True
-
 
 def collect_stats(datafield, rev):
     try:
