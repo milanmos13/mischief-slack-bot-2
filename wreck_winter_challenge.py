@@ -247,6 +247,11 @@ class WreckAWinter:
                 self.like_message(reaction='thumbsdown')
             if 'good bot' in self._lower_text:
                 self.like_message(reaction='woman-tipping-hand')
+            if 'bread' in self._lower_text:
+            	self.like_message(reaction='bread')
+            	self.like_message(reaction='moneybag')
+            	self.like_message(reaction='croissant')
+            	self.like_message(reaction='100')
             if count >= 1:
                 self.like_message(reaction='octopus')
 
