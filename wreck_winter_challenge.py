@@ -1,7 +1,6 @@
 from winter_db import *
 from utils import *
 from slack_api import *
-from slack_response import *
 from datetime import datetime
 
 class WreckAWinter:
