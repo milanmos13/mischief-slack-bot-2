@@ -10,8 +10,10 @@ from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
 
+#CREATE TABLE winter_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, workout_score numeric(4, 1), last_post DATE, slack_id INT, last_time BIGINT)
+
 def add_num_posts(mention_id, event_time, name):
-    # "UPDATE wreck_data SET num_posts=num_posts+1, WHERE name = '_____' AND last_time != "
+    # "UPDATE winter_data SET num_posts=num_posts+1, WHERE name = '_____' AND last_time != "
     try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -23,14 +25,14 @@ def add_num_posts(mention_id, event_time, name):
             port=url.port
         )
         cursor = conn.cursor()
-        # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
+        # get all of the people whose workout scores are greater than -1 (any non players have a workout score of -1)
         cursor.execute(sql.SQL(
-            "UPDATE wreck_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
+            "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
             [mention_id[0]])
         if cursor.rowcount == 0:
-            cursor.execute(sql.SQL("INSERT INTO wreck_data VALUES (%s, 0, 0, 0, now(), %s, %s)"),
+            cursor.execute(sql.SQL("INSERT INTO winter_data VALUES (%s, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time])
-            send_debug_message("%s is new to Wreck" % name)
+            send_debug_message("%s first time posting" % name)
         conn.commit()
         cursor.close()
         conn.close()
@@ -54,18 +56,18 @@ def collect_stats(datafield, rev):
         cursor = conn.cursor()
         # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
         cursor.execute(sql.SQL(
-            "SELECT * FROM wreck_data WHERE workout_score > -1.0"), )
+            "SELECT * FROM winter_data WHERE workout_score > -1.0"), )
         leaderboard = cursor.fetchall()
         leaderboard.sort(key=lambda s: s[datafield], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
-            string1 += '%d) %s with %.1f points \n' % (x + 1, leaderboard[x][0], leaderboard[x][datafield])
+            string1 += '%d) %s with %.1f points; %.1f throws; %.1f cardio; %.1f lifts. \n' % (x + 1, leaderboard[x][0], 
+            	leaderboard[x][datafield], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
         cursor.close()
         conn.close()
         return string1
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(error)
-
 
 def get_group_info():
     url = "https://slack.com/api/users.list?token=" + os.getenv('BOT_OAUTH_ACCESS_TOKEN')
@@ -97,12 +99,12 @@ def add_to_db(names, addition, num_workouts, ids):  # add "addition" to each of 
         for x in range(0, len(names)):
             print("starting", names[x])
             cursor.execute(sql.SQL(
-                "SELECT workout_score FROM wreck_data WHERE slack_id = %s"), [str(ids[x])])
+                "SELECT workout_score FROM winter_data WHERE slack_id = %s"), [str(ids[x])])
             score = cursor.fetchall()[0][0]
             score = int(score)
             if score != -1:
                 cursor.execute(sql.SQL(
-                    "UPDATE wreck_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s, last_post="
+                    "UPDATE winter_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s, last_post="
                     "now() WHERE slack_id = %s"),
                     [str(num_workouts), str(addition), ids[x]])
                 conn.commit()
@@ -137,7 +139,7 @@ def subtract_from_db(names, subtraction, ids):  # subtract "subtraction" from ea
         cursor = conn.cursor()
         for x in range(0, len(names)):
             cursor.execute(sql.SQL(
-                "UPDATE wreck_data SET workout_score = workout_score - %s WHERE slack_id = %s"),
+                "UPDATE winter_data SET workout_score = workout_score - %s WHERE slack_id = %s"),
                 [subtraction, ids[x]])
             conn.commit()
             send_debug_message("subtracted %s" % names[x])
@@ -166,7 +168,7 @@ def reset_scores():  # reset the scores of everyone
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL(
-            "UPDATE wreck_data SET num_workouts = 0, workout_score = 0, last_post = now() WHERE workout_score != -1"
+            "UPDATE winter_data SET num_workouts = 0, workout_score = 0, last_post = now() WHERE workout_score != -1"
         ))
         # cursor.execute(sql.SQL(
         #     "DELETE FROM tribe_workouts"
@@ -195,7 +197,7 @@ def reset_talkative():  # reset the num_posts of everyone
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL(
-            "UPDATE wreck_data SET num_posts = 0 WHERE workout_score != -1"))
+            "UPDATE winter_data SET num_posts = 0 WHERE workout_score != -1"))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(str(error))
@@ -206,7 +208,7 @@ def reset_talkative():  # reset the num_posts of everyone
 
 
 def add_reaction_info_date(date, yes, drills, injured, no):
-    # "UPDATE wreck_data SET num_posts=num_posts+1, WHERE name = 'William Syre' AND last_time != "
+    # "UPDATE winter_data SET num_posts=num_posts+1, WHERE name = 'William Syre' AND last_time != "
     try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -238,7 +240,7 @@ def add_reaction_info_date(date, yes, drills, injured, no):
 
 
 def add_reaction_info_ts(ts):
-    # "UPDATE wreck_data SET num_posts=num_posts+1, WHERE name = 'Sam Loop' AND last_time != "
+    # "UPDATE winter_data SET num_posts=num_posts+1, WHERE name = 'Sam Loop' AND last_time != "
     try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -293,121 +295,6 @@ def check_reaction_timestamp(ts):
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(error)
         return []
-
-
-def count_practice(id, date, number):
-    try:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        # cursor = conn.cursor()
-        # # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
-        # cursor.execute(sql.SQL("UPDATE tribe_attendance SET attendance_code = %s, date_responded=now() where slack_id = %s and practice_date = %s"), [number, id, date])
-        # if cursor.rowcount == 1:
-        #     conn.commit()
-        #     cursor.close()
-        #     conn.close()
-        #     send_debug_message("marked  <@" + str(id) + "> as " + str(number) + " for practice on " + date)
-        # else:
-        #     conn.commit()
-        #     cursor.close()
-        #     conn.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        send_debug_message(error)
-
-
-def add_dummy_responses(date):
-    try:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        cursor = conn.cursor()
-        cursor.execute(sql.SQL("SELECT slack_id, name FROM wreck_data WHERE workout_score != -1"))
-        stuff = cursor.fetchall()
-        print("This is the stuff")
-        print(stuff)
-        # for slack_id, real_name in stuff:
-        #     cursor.execute(sql.SQL("INSERT INTO tribe_attendance VALUES(%s, %s, -1, %s, now())"),
-        #                    [real_name, slack_id, date])
-        # conn.commit()
-        # cursor.close()
-        # conn.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        send_debug_message(error)
-
-
-def get_unanswered(date):
-    try:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        # cursor = conn.cursor()
-        # # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
-        # cursor.execute(sql.SQL("SELECT slack_id FROM tribe_attendance WHERE practice_date = %s and attendance_code = -1"), [date])
-        # unanswered = cursor.fetchall()
-        # print(unanswered)
-        # return unanswered
-    except (Exception, psycopg2.DatabaseError) as error:
-        send_debug_message(error)
-        return []
-
-def get_practice_attendance(date):
-    try:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        # cursor = conn.cursor()
-        # # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
-        # cursor.execute(sql.SQL("SELECT name FROM tribe_attendance WHERE practice_date = %s AND attendance_code = 1"), [date])
-        # injured = cursor.fetchall()
-        # injured = [x[0] for x in injured]
-
-        # cursor.execute(sql.SQL("SELECT name FROM tribe_attendance WHERE practice_date = %s AND attendance_code = -1"), [date])
-        # unanswered = cursor.fetchall()
-        # unanswered = [x[0] for x in unanswered]
-
-        # cursor.execute(sql.SQL("SELECT name FROM tribe_attendance WHERE practice_date = %s AND attendance_code = 2"), [date])
-        # drills = cursor.fetchall()
-        # drills = [x[0] for x in drills]
-
-        # cursor.execute(sql.SQL("SELECT name FROM tribe_attendance WHERE practice_date = %s AND attendance_code = 3"), [date])
-        # playing = cursor.fetchall()
-        # playing = [x[0] for x in playing]
-
-        # cursor.execute(sql.SQL("SELECT name FROM tribe_attendance WHERE practice_date = %s AND attendance_code = 0"), [date])
-        # missing = cursor.fetchall()
-        # missing = [x[0] for x in missing]
-
-        # toRet = {'playing': playing, 'injured': injured, 'drills': drills, 'unanswered': unanswered, "missing": missing}
-        # print(toRet)
-        # return toRet
-    except (Exception, psycopg2.DatabaseError) as error:
-        send_debug_message(error)
-        return {'failure': []}
 
 def add_workout(name, slack_id, workout_type):
     cursor = None

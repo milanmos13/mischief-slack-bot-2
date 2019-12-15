@@ -151,20 +151,27 @@ class WreckAWinter:
             self._name = ""
 
     def parse_for_additions(self):
-    	# TO DO: database req
+    	#DB reqs added
         self._points_to_add = 0
+        self.throw_req_filled = 0
+        self.gym_req_filled = 0
+        self.cardio_req_filled = 0:
         if '!gym' in self._lower_text:
             self._points_to_add += self.GYM_POINTS
+            self.gym_req_filled += 1
             self._additions.append('!gym')
         if '!throw' in self._lower_text:
             self._points_to_add += self.THROW_POINTS
+            self.throw_req_filled += 1
             self._additions.append('!throw')
         if '!cardio' in self._lower_text:
             self._points_to_add += self.CARDIO_POINTS
+            self.cardio_req_filled += 1
             self._additions.append('!cardio')
 
 
     def handle_db(self):
+    	#To Do: add db reqs
         if not self._repeat:
             num = add_to_db(self._all_names, self._points_to_add, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
@@ -183,14 +190,14 @@ class WreckAWinter:
         if not self._repeat:
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!regionals\n!points"
-                                   "\n!gym\n!sprints\n!tournament\n!pickup\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
+                                   "\n!gym\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
                                    "\n!groupsince [YYYY-MM-DD] [type]"
                                    "\n \"Title\" \"option 1\" ... \"option n\"",
                                    channel=self._channel, bot_name="Helper Bot")
             if "!points" in self._lower_text:
-                send_tribe_message("Point Values:\ngym: %.1f\ntrack %.1f\ntournament %.1f\npickup %.1f\nthrow %.1f\nswim %.1f\nbike %.1f\nrun %.1f"
-                                   % (self.GYM_POINTS, self.SPRINTS_POINTS, self.TOURNAMENT_POINTS, self.PICKUP_POINTS,
-                                      self.THROW_POINTS, self.CARDIO_POINTS, self.CHALLENGE_POINTS), channel=self._channel)
+                send_tribe_message("Point Values:\ngym: %.1f\n throw %.1f\ncardio %.1f\nchallenge %.1f"
+                                   % (self.GYM_POINTS, self.THROW_POINTS, self.CARDIO_POINTS, 
+                                   	self.CHALLENGE_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
                 to_print = collect_stats(3, True)

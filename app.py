@@ -1,6 +1,6 @@
-from database_connection import *
+from winter_db import *
 from interactive_component_payload import InteractiveComponentPayload
-from slack_response import SlackResponse
+from wreck_winter_challenge import WreckAWinter
 from slack_api import *
 from time import sleep
 import json
@@ -14,12 +14,9 @@ app = Flask(__name__)
 def webhook():
     print("event received")
     GYM_POINTS = 1.0
-    SPRINTS_POINTS = 1.0
     THROW_POINTS = 1.0
     CARDIO_POINTS = 0.5
-    PRACTICE_POINTS = 1.0
     CHALLENGE_POINTS = 1.5
-    TOURNAMENT_POINTS = 1.5
     BOT_CHANNEL = "CBJAJPZ8B"
     data = request.get_json()
     if data['type'] == "url_verification":
