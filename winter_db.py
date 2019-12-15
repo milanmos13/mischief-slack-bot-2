@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
 
-#CREATE TABLE winter_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, workout_score numeric(4, 1), last_post DATE, slack_id INT, last_time BIGINT)
+#CREATE TABLE winter_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, workout_score numeric(4, 1), last_post DATE, slack_id CHAR(9), last_time BIGINT)
 
 def add_num_posts(mention_id, event_time, name):
     try:
@@ -58,7 +58,7 @@ def collect_stats(datafield, rev):
         leaderboard.sort(key=lambda s: s[datafield], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
-            string1 += '%d) %s with %.1f points; %.1f throws; %.1f cardio; %.1f lifts. \n' % (x + 1, leaderboard[x][0], 
+            string1 += '%d) %s with %.1f points; %.1d throws; %.1d cardio; %.1d lifts. \n' % (x + 1, leaderboard[x][0], 
             	leaderboard[x][datafield], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
         cursor.close()
         conn.close()
@@ -78,7 +78,7 @@ def get_emojis():
     return json
 
 
-def add_to_db(names, addition, num_workouts, ids):  # add "addition" to each of the "names" in the db
+def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
     cursor = None
     conn = None
     num_committed = 0
@@ -100,10 +100,12 @@ def add_to_db(names, addition, num_workouts, ids):  # add "addition" to each of 
             score = cursor.fetchall()[0][0]
             score = int(score)
             if score != -1:
-                cursor.execute(sql.SQL(
-                    "UPDATE winter_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s, last_post="
-                    "now() WHERE slack_id = %s"),
-                    [str(num_workouts), str(addition), ids[x]])
+                cursor.execute(sql.SQL("""
+                    UPDATE winter_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s,
+                    num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
+                    last_post=now() WHERE slack_id = %s
+                    """),
+                    [str(num_workouts), str(addition), str(throw_num), str(cardio_num), str(gym_num) ids[x]])
                 conn.commit()
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
                 print("committed %s" % names[x])
@@ -164,9 +166,10 @@ def reset_scores():  # reset the scores of everyone
             port=url.port
         )
         cursor = conn.cursor()
-        cursor.execute(sql.SQL(
-            "UPDATE winter_data SET num_workouts = 0, workout_score = 0, last_post = now() WHERE workout_score != -1"
-        ))
+        cursor.execute(sql.SQL("""
+            UPDATE winter_data SET num_workouts = 0, workout_score = 0,
+            num_throws = 0, num_cardio = 0, num_gym = 0, last_post = now() WHERE workout_score != -1"
+        """))
         # cursor.execute(sql.SQL(
         #     "DELETE FROM tribe_workouts"
         # ))

@@ -171,7 +171,8 @@ class WreckAWinter:
     def handle_db(self):
     	#To Do: add db reqs
         if not self._repeat:
-            num = add_to_db(self._all_names, self._points_to_add, len(self._additions), self._all_ids)
+            num = add_to_db(self._all_names, self._points_to_add, self.gym_req_filled, 
+            self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
                 for workout in self._additions:
                     add_workout(self._all_names[i], self._all_ids[i], workout)
@@ -191,7 +192,7 @@ class WreckAWinter:
                                    "\n!gym\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
                                    "\n!groupsince [YYYY-MM-DD] [type]"
                                    "\n \"Title\" \"option 1\" ... \"option n\"",
-                                   channel=self._channel, bot_name="Helper Bot")
+                                   channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
                 send_tribe_message("Point Values:\ngym: %.1f\n throw %.1f\ncardio %.1f\nchallenge %.1f"
                                    % (self.GYM_POINTS, self.THROW_POINTS, self.CARDIO_POINTS, 
@@ -217,7 +218,7 @@ class WreckAWinter:
                 regionals = datetime(2020, 4, 25, 8, 0, 0)
                 until = regionals - now
                 send_tribe_message("regionals is in " + stringFromSeconds(until.total_seconds()), channel=self._channel)
-            if '!subtract' in self._lower_text and self._user_id == 'UAPHZ3SJZ':
+            if '!subtract' in self._lower_text and self._user_id == 'UDDLRR7SN':
                 send_debug_message("SUBTRACTING: " + self._lower_text[-3:] + " FROM: " + str(self._all_names[:-1]))
                 num = subtract_from_db(self._all_names[:-1], float(self._lower_text[-3:]), self._all_ids[:-1])
                 print(num)
