@@ -1,5 +1,4 @@
 from winter_db import *
-from interactive_component_payload import InteractiveComponentPayload
 from wreck_winter_challenge import WreckAWinter
 from slack_api import *
 from time import sleep
@@ -127,14 +126,4 @@ def webhook():
 
     print(obj)
     print("responding")
-    return make_response("Ok", 200, )
-
-
-@app.route('/interactiveComponents', methods=['POST'])
-def interactive_component_webhook():
-    form_json = json.loads(request.form["payload"])
-    print("This is the data that came with the interactive component")
-    print(form_json)
-    obj = InteractiveComponentPayload(form_json)
-    obj.handle_component()
     return make_response("Ok", 200, )
