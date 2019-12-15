@@ -105,7 +105,7 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
                     num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
                     last_post=now() WHERE slack_id = %s
                     """),
-                    [str(num_workouts), str(addition), str(throw_num), str(cardio_num), str(gym_num) ids[x]])
+                    [str(num_workouts), str(addition), str(throw_num), str(cardio_num), str(gym_num), ids[x]])
                 conn.commit()
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
                 print("committed %s" % names[x])
