@@ -26,9 +26,9 @@ def add_num_posts(mention_id, event_time, name):
         )
         cursor = conn.cursor()
         # get all of the people whose workout scores are greater than -1 (any non players have a workout score of -1)
-        cursor.execute(sql.SQL(
-            "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
-            [mention_id[0]])
+        # cursor.execute(sql.SQL(
+        #     "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
+        #     [mention_id[0]])
         if cursor.rowcount == 0:
             cursor.execute(sql.SQL("INSERT INTO winter_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time])
