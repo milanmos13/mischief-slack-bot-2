@@ -167,9 +167,8 @@ class WreckAWinter:
             self.cardio_req_filled += 1
             self._additions.append('!cardio')
 
-
     def handle_db(self):
-    	#To Do: add db reqs
+    	#added reqs
         if not self._repeat:
             num = add_to_db(self._all_names, self._points_to_add, self.gym_req_filled, 
             self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
@@ -188,7 +187,7 @@ class WreckAWinter:
         count = 0
         if not self._repeat:
             if "!help" in self._lower_text:
-                send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!regionals\n!points"
+                send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!points"
                                    "\n!gym\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
                                    "\n!groupsince [YYYY-MM-DD] [type]"
                                    "\n \"Title\" \"option 1\" ... \"option n\"",
@@ -212,12 +211,6 @@ class WreckAWinter:
             if '!lizzie' in self._lower_text:
                 count += 1
                 send_tribe_message("All hail the lizard king", channel=self._channel)
-            if '!regionals' in self._lower_text:
-                count += 1
-                now = datetime.now()
-                regionals = datetime(2020, 4, 25, 8, 0, 0)
-                until = regionals - now
-                send_tribe_message("regionals is in " + stringFromSeconds(until.total_seconds()), channel=self._channel)
             if '!subtract' in self._lower_text and self._user_id == 'UDDLRR7SN':
                 send_debug_message("SUBTRACTING: " + self._lower_text[-3:] + " FROM: " + str(self._all_names[:-1]))
                 num = subtract_from_db(self._all_names[:-1], float(self._lower_text[-3:]), self._all_ids[:-1])
