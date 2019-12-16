@@ -101,11 +101,11 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
             score = int(score)
             if score != -1:
                 cursor.execute(sql.SQL("""
-                    UPDATE winter_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s,
+                    UPDATE winter_data SET num_workouts=num_workouts+%s,
                     num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
-                    last_post=now() WHERE slack_id = %s
+                    workout_score=workout_score+%s, last_post=now() WHERE slack_id = %s
                     """),
-                    [str(num_workouts), str(addition), str(throw_num), str(cardio_num), str(gym_num), ids[x]])
+                    [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), str(addition), ids[x]])
                 conn.commit()
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
                 print("committed %s" % names[x])

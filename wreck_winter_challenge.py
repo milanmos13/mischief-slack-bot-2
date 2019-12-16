@@ -11,7 +11,7 @@ class WreckAWinter:
         ## point values
         self.GYM_POINTS = 1.0
         self.THROW_POINTS = 1.0
-        self.CARDIO_POINTS = 0.5
+        self.CARDIO_POINTS = 1.0
 
         ## winter workout requirements
         # my thought for design: have a column in leaderboard for how many times they have ___ that week; checking stats will
@@ -154,7 +154,7 @@ class WreckAWinter:
         self.throw_req_filled = 0
         self.gym_req_filled = 0
         self.cardio_req_filled = 0
-        if '!gym' in self._lower_text or '!lift' in self._lower_text:
+        if '!lift' in self._lower_text or '!gym' in self._lower_text:
             self._points_to_add += self.GYM_POINTS
             self.gym_req_filled += 1
             self._additions.append('!gym')
