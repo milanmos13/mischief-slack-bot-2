@@ -168,7 +168,7 @@ def reset_scores():  # reset the scores of everyone
         cursor = conn.cursor()
         cursor.execute(sql.SQL("""
             UPDATE winter_data SET num_workouts = 0, num_throws = 0, num_cardio = 0, 
-            num_gym = 0, workout_score = 0, last_post = now() WHERE workout_score != -1"
+            num_gym = 0, workout_score = 0, last_post = now() WHERE workout_score != -1
         """))
         # cursor.execute(sql.SQL(
         #     "DELETE FROM tribe_workouts"
