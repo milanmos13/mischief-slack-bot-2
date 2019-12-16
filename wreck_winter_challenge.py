@@ -182,7 +182,7 @@ class WreckAWinter:
                 self.like_message(reaction='skull_and_crossbones')
 
     def isRepeat(self):
-        self._repeat = add_num_posts([self._user_id], self._event_time, self._name)
+        self._repeat = add_num_posts([self._user_id], self._event_time, self._name, self._channel)
 
     def execute_commands(self):
         count = 0
