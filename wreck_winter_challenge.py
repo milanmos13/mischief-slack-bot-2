@@ -154,7 +154,7 @@ class WreckAWinter:
         self.throw_req_filled = 0
         self.gym_req_filled = 0
         self.cardio_req_filled = 0
-        if '!lift' or '!gym' in self._lower_text:
+        if '!gym' in self._lower_text:
             self._points_to_add += self.GYM_POINTS
             self.gym_req_filled += 1
             self._additions.append('!gym')
