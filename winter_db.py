@@ -106,9 +106,10 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
                     last_post=now() WHERE slack_id = %s
                     """),
                     [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), ids[x]])
-                conn.commit()
+                #conn.commit()
+                send_debug_message("additions is ", str(addition))
                 cursor.execute(sql.SQL(
-                    "UPDATE winter_data SET workout_score=workout_score+%s WHERE slack_id = %s"),
+                    "UPDATE wreck_data SET workout_score=workout_score+%s, last_post=now() WHERE slack_id = %s"),
                     [str(addition), ids[x]])
                 conn.commit()
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
