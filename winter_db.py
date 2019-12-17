@@ -125,6 +125,7 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
 def get_req(mention_id):
     cursor = None
     conn = None
+    req_string = ""
     try:
         urllib.parse.uses_netloc.append("postgres")
         urllib.parse.uses_netloc.append("postgres")
@@ -140,8 +141,7 @@ def get_req(mention_id):
         cursor.execute(sql.SQL(
             "SELECT * FROM winter_data WHERE slack_id = %s"), [mention_id[0]])
         entry = cursor.fetchall()
-        req_string = '%s requirements: %.1d throws; %.1d cardio; %.1d lifts.', %
-                (entry[x][0], entry[x][3], entry[x][4], entry[x][5])
+        req_string += '%s requirements fulfilled: %.1d throws; %.1d cardio; %.1d lifts.' % (entry[x][0], entry[x][3], entry[x][4], entry[x][5])
         cursor.close()
         conn.close()
         return req_string
