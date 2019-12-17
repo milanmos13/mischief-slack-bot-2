@@ -122,10 +122,13 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
         return num_committed
 
 def get_req(mention_id):
-	try:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
+	cursor = None
+    conn = None
+    try:
+    	urllib.parse.uses_netloc.append("postgres")
+    	urllib.parse.uses_netloc.append("postgres")
+    	url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+    	conn = psycopg2.connect(
             database=url.path[1:],
             user=url.username,
             password=url.password,
