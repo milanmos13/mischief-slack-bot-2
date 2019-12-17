@@ -121,7 +121,7 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
             conn.close()
         return num_committed
 
-def get_req(mention_id)
+def get_req(mention_id):
 	try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
