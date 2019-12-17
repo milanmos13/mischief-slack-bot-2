@@ -55,7 +55,7 @@ def collect_stats(datafield, rev):
         cursor.execute(sql.SQL(
             "SELECT * FROM winter_data WHERE workout_score > -1.0"), )
         leaderboard = cursor.fetchall()
-        leaderboard.sort(key=lambda s: s[datafield], reverse=rev)  # sort the leaderboard by score descending
+        leaderboard.sort(key=lambda s: s[6], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f points; %.1d throws; %.1d cardio; %.1d lifts. \n' % (x + 1, leaderboard[x][0], 
