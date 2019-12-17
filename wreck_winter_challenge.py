@@ -163,6 +163,7 @@ class WreckAWinter:
     def handle_db(self):
     	#added reqs
         if not self._repeat:
+        	send_debug_message("self._points_to_add: " self._points_to_add)
             num = add_to_db(self._all_names, self._points_to_add, self.gym_req_filled, 
             self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
@@ -228,7 +229,7 @@ class WreckAWinter:
                 count += 1
             if '!self' in self._lower_text:
             	req = get_req(self._user_id)
-            	send_tribe_message(req, channel=self._channel, bot_name=self._name)
+            	send_message(req, channel=self._channel, bot_name=self._name)
             	count += 1
             if '!test' in self._lower_text:
                 pass
