@@ -59,7 +59,7 @@ def collect_stats(datafield, rev):
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f points; %.1d throws; %.1d cardio; %.1d lifts. \n' % (x + 1, leaderboard[x][0], 
-                leaderboard[x][datafield], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
+                leaderboard[x][6], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
         cursor.close()
         conn.close()
         return string1
@@ -103,9 +103,9 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
                 cursor.execute(sql.SQL("""
                     UPDATE winter_data SET num_workouts=num_workouts+%s,
                     num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
-                    workout_score=workout_score+1, last_post=now() WHERE slack_id = %s
+                    workout_score=workout_score+%s, last_post=now() WHERE slack_id = %s
                     """),
-                    [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), ids[x]])
+                    [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), str(addition), ids[x]])
                 conn.commit()
                 send_debug_message("str(addition): %s" % str(addition))
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
