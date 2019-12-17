@@ -226,6 +226,10 @@ class WreckAWinter:
                 num = add_to_db(self._all_names[:-1], self._lower_text[-3:], 1, self._all_ids[:-1])
                 print(num)
                 count += 1
+            if '!self' in self._lower_text:
+            	req = get_req(self._user_id)
+            	send_tribe_message(req, channel=self._channel, bot_name=self._name)
+            	count += 1
             if '!test' in self._lower_text:
                 pass
             if self._points_to_add > 0:

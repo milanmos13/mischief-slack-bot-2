@@ -121,6 +121,28 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
             conn.close()
         return num_committed
 
+def get_req(mention_id)
+	try:
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+        conn = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        cursor = conn.cursor()
+        cursor.execute(sql.SQL(
+            "SELECT * FROM winter_data WHERE slack_id = %s"), [mention_id[0]])
+        entry = cursor.fetchall()
+        req_string = '%s requirements: %.1d throws; %.1d cardio; %.1d lifts.', %
+				(entry[x][0], entry[x][3], entry[x][4], entry[x][5])
+        cursor.close()
+        conn.close()
+        return req_string
+    except (Exception, psycopg2.DatabaseError) as error:
+        send_debug_message(error)
 
 def subtract_from_db(names, subtraction, ids):  # subtract "subtraction" from each of the "names" in the db
     cursor = None
