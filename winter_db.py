@@ -59,7 +59,7 @@ def collect_stats(datafield, rev):
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f points; %.1d throws; %.1d cardio; %.1d lifts. \n' % (x + 1, leaderboard[x][0], 
-            	leaderboard[x][datafield], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
+                leaderboard[x][datafield], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5])
         cursor.close()
         conn.close()
         return string1
@@ -123,13 +123,13 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
 
 
 def get_req(mention_id):
-	cursor = None
-	conn = None
-	try:
-		urllib.parse.uses_netloc.append("postgres")
-    	urllib.parse.uses_netloc.append("postgres")
-    	url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-    	conn = psycopg2.connect(
+    cursor = None
+    conn = None
+    try:
+        urllib.parse.uses_netloc.append("postgres")
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+        conn = psycopg2.connect(
             database=url.path[1:],
             user=url.username,
             password=url.password,
@@ -141,7 +141,7 @@ def get_req(mention_id):
             "SELECT * FROM winter_data WHERE slack_id = %s"), [mention_id[0]])
         entry = cursor.fetchall()
         req_string = '%s requirements: %.1d throws; %.1d cardio; %.1d lifts.', %
-				(entry[x][0], entry[x][3], entry[x][4], entry[x][5])
+                (entry[x][0], entry[x][3], entry[x][4], entry[x][5])
         cursor.close()
         conn.close()
         return req_string
