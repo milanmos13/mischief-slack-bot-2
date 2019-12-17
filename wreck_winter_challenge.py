@@ -142,7 +142,7 @@ class WreckAWinter:
             self._name = ""
 
     def parse_for_additions(self):
-    	#DB reqs added
+        #DB reqs added
         self._points_to_add = 0
         self.throw_req_filled = 0
         self.gym_req_filled = 0
@@ -161,9 +161,9 @@ class WreckAWinter:
             self._additions.append('!cardio')
 
     def handle_db(self):
-    	#added reqs
+        #added reqs
         if not self._repeat:
-        	send_debug_message("self._points_to_add: ", self._points_to_add)
+            send_debug_message("self._points_to_add: " self._points_to_add)
             num = add_to_db(self._all_names, self._points_to_add, self.gym_req_filled,
             self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
@@ -189,7 +189,7 @@ class WreckAWinter:
             if "!points" in self._lower_text:
                 send_tribe_message("Point Values:\ngym: %.1f\n throw %.1f\ncardio %.1f\nchallenge %.1f"
                                    % (self.GYM_POINTS, self.THROW_POINTS, self.CARDIO_POINTS, 
-                                   	self.CHALLENGE_POINTS), channel=self._channel)
+                                    self.CHALLENGE_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
                 to_print = collect_stats(3, True)
@@ -228,9 +228,9 @@ class WreckAWinter:
                 print(num)
                 count += 1
             if '!self' in self._lower_text:
-            	req = get_req(self._user_id)
-            	send_message(req, channel=self._channel, bot_name=self._name)
-            	count += 1
+                req = get_req(self._user_id)
+                send_message(req, channel=self._channel, bot_name=self._name)
+                count += 1
             if '!test' in self._lower_text:
                 pass
             if self._points_to_add > 0:
@@ -240,10 +240,10 @@ class WreckAWinter:
             if 'good bot' in self._lower_text:
                 self.like_message(reaction='woman-tipping-hand')
             if 'bread' in self._lower_text:
-            	self.like_message(reaction='bread')
-            	self.like_message(reaction='moneybag')
-            	self.like_message(reaction='croissant')
-            	self.like_message(reaction='100')
+                self.like_message(reaction='bread')
+                self.like_message(reaction='moneybag')
+                self.like_message(reaction='croissant')
+                self.like_message(reaction='100')
             if count >= 1:
                 self.like_message(reaction='snowflake')
 
