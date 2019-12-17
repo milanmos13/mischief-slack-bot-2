@@ -79,7 +79,7 @@ def get_emojis():
 
 
 def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
-    cursor = None
+	cursor = None
     conn = None
     num_committed = 0
     try:
@@ -96,18 +96,15 @@ def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids
         for x in range(0, len(names)):
             print("starting", names[x])
             cursor.execute(sql.SQL(
-                "SELECT workout_score FROM winter_data WHERE slack_id = %s"), [str(ids[x])])
+                "SELECT workout_score FROM wreck_data WHERE slack_id = %s"), [str(ids[x])])
             score = cursor.fetchall()[0][0]
             score = int(score)
             if score != -1:
-                cursor.execute(sql.SQL("""
-                    UPDATE winter_data SET num_workouts=num_workouts+%s,
-                    num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
-                    workout_score=workout_score+%s, last_post=now() WHERE slack_id = %s
-                    """),
-                    [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), str(addition), ids[x]])
+                cursor.execute(sql.SQL(
+                    "UPDATE wreck_data SET num_workouts=num_workouts+%s, workout_score=workout_score+%s, last_post="
+                    "now() WHERE slack_id = %s"),
+                    [str(num_workouts), str(addition), ids[x]])
                 conn.commit()
-                send_debug_message("str(addition):", str(addition))
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
                 print("committed %s" % names[x])
                 num_committed += 1
