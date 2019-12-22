@@ -78,7 +78,7 @@ def get_emojis():
     return json
 
 
-def add_to_db(names, addition, gym_num, throw_num, cardio_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
+def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
     cursor = None
     conn = None
     num_committed = 0
