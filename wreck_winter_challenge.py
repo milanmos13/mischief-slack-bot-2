@@ -164,7 +164,6 @@ class WreckAWinter:
     def handle_db(self):
         #added reqs
         if not self._repeat:
-            send_debug_message("self.gym_req_filled: ", self.gym_req_filled)
             num = add_to_db(self._channel, self._all_names, self._points_to_add, self.gym_req_filled,
             self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
