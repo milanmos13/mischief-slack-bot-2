@@ -156,7 +156,7 @@ class WreckAWinter:
             self.throw_req_filled += 1
             self._additions.append('!throw')
         #if '!sprint' in self._lower_text or '!sprints' in self._lower_text:
-        if '!cardio' in self._lower_text:
+        if '!cardio' in self._lower_text or '!sprint' in self._lower_text or '!sprints' in self._lower_text:
             self._points_to_add += self.CARDIO_POINTS
             self.cardio_req_filled += 1
             self._additions.append('!cardio')
