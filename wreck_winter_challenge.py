@@ -244,7 +244,7 @@ class WreckAWinter:
                 self.like_message(reaction='croissant')
                 self.like_message(reaction='100')
             if count >= 1:
-                self.like_message(reaction='snowflake')
+                self.like_message(reaction='sunflower')
 
     def like_message(self, reaction='robot_face'):
         slack_token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
