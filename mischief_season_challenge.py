@@ -1,14 +1,15 @@
-from winter_db import *
+from mischief_db import *
 from utils import *
 from slack_api import *
 from datetime import datetime
 
-class WreckAWinter:
+class MischiefSlack:
     def __init__(self, json_data):
         self._event = json_data['event']
         self._repeat = False
 
         ## point values
+        ## TODO: change from Berry
         self.GYM_POINTS = 1.0
         self.THROW_POINTS = 1.0
         self.CARDIO_POINTS = 1.0
@@ -142,6 +143,7 @@ class WreckAWinter:
             self._name = ""
 
     def parse_for_additions(self):
+        ## TODO: update point reqs
         #DB reqs added
         self._points_to_add = 0
         self.throw_req_filled = 0
@@ -179,6 +181,7 @@ class WreckAWinter:
     def execute_commands(self):
         count = 0
         if not self._repeat:
+            ## put the fun stuff here
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!points"
                                    "\n!gym\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
@@ -201,27 +204,24 @@ class WreckAWinter:
                 count += 1
                 to_print = collect_stats(1, True)
                 send_message(to_print, channel=self._channel, bot_name=self._name, url=self._avatar_url)
-            if '!lizzie' in self._lower_text:
-                count += 1
-                send_tribe_message("All hail the lizard king", channel=self._channel)
-            if '!subtract' in self._lower_text and self._user_id == 'UDDLRR7SN':
+            if '!subtract' in self._lower_text and self._user_id == 'U03MGMXE5U6':
                 send_debug_message("SUBTRACTING: " + self._lower_text[-3:] + " FROM: " + str(self._all_names[:-1]))
                 num = subtract_from_db(self._all_names[:-1], float(self._lower_text[-3:]), self._all_ids[:-1])
                 print(num)
                 count += 1
-            if '!reset' in self._lower_text and self._user_id == 'UDDLRR7SN':
+            if '!reset' in self._lower_text and self._user_id == 'U03MGMXE5U6':
                 to_print = collect_stats(3, True)
                 send_tribe_message(to_print, channel=self._channel, bot_name=self._name)
                 reset_scores()
                 send_debug_message("Resetting leaderboard")
                 count += 1
-            if '!silence' in self._lower_text and self._user_id == 'UDDLRR7SN':
+            if '!silence' in self._lower_text and self._user_id == 'U03MGMXE5U6':
                 to_print = collect_stats(1, True)
                 send_tribe_message(to_print, channel=self._channel, bot_name=self._name)
                 reset_talkative()
                 send_debug_message("Resetting talkative")
                 count += 1
-            if '!add' in self._lower_text and self._user_id == 'UDDLRR7SN':
+            if '!add' in self._lower_text and self._user_id == 'U03MGMXE5U6':
                 send_debug_message("ADDING: " + self._lower_text[-3:] + " TO: " + str(self._all_names[:-1]))
                 num = add_to_db(self._all_names[:-1], self._lower_text[-3:], 1, self._all_ids[:-1])
                 print(num)
@@ -234,7 +234,7 @@ class WreckAWinter:
                 pass
             if self._points_to_add > 0:
                 self.like_message(reaction='angry')
-            if 'groupme' in self._lower_text or 'bamasecs' in self._lower_text:
+            if 'groupme' in self._lower_text or 'ultiworld' in self._lower_text:
                 self.like_message(reaction='thumbsdown')
             if 'good bot' in self._lower_text:
                 self.like_message(reaction='woman-tipping-hand')

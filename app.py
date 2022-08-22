@@ -1,5 +1,5 @@
-from winter_db import *
-from wreck_winter_challenge import WreckAWinter
+from mischief_db import *
+from mischief_season_challenge import MischiefSlack
 from slack_api import *
 from time import sleep
 import json
@@ -12,11 +12,12 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
     print("event received")
+    ## TODO: change from Berry
     GYM_POINTS = 1.0
     THROW_POINTS = 1.0
     CARDIO_POINTS = 0.5
     CHALLENGE_POINTS = 1.5
-    BOT_CHANNEL = "CBJAJPZ8B"
+    BOT_CHANNEL = "C03UHTL3J58"
     data = request.get_json()
     if data['type'] == "url_verification":
         return jsonify({'challenge': data['challenge']})
@@ -26,7 +27,7 @@ def webhook():
         if int(request.__dict__['environ']['HTTP_X_SLACK_RETRY_NUM']):
             return make_response("Ok", 200, )
     print(data)
-    obj = WreckAWinter(data)
+    obj = MischiefSlack(data)
     if not obj._bot and not obj._reaction_added and not obj._reaction_removed:
         print("not a bot")
         obj.isRepeat()

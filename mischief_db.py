@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
 
-#CREATE TABLE winter_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, workout_score numeric(4, 1), last_post DATE, slack_id CHAR(9), last_time BIGINT)
+#CREATE TABLE mischief_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, score numeric(4, 1), last_post DATE, slack_id CHAR(9), last_time BIGINT)
 
 def add_num_posts(mention_id, event_time, name, channel_id):
     try:
@@ -25,10 +25,10 @@ def add_num_posts(mention_id, event_time, name, channel_id):
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL(
-            "UPDATE winter_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
+            "UPDATE mischief_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
             [mention_id[0]])
-        if cursor.rowcount == 0 and channel_id == "GUF7AMF1Q":
-            cursor.execute(sql.SQL("INSERT INTO winter_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
+        if cursor.rowcount == 0 and channel_id == "C03UHTL3J58":
+            cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time])
             send_debug_message("%s is new to Mischief" % name)
         conn.commit()
@@ -51,9 +51,9 @@ def collect_stats(datafield, rev):
             port=url.port
         )
         cursor = conn.cursor()
-        # get all of the people who's workout scores are greater than -1 (any non players have a workout score of -1)
+        # get all of the people whose scores are greater than -1 (any non players have a workout score of -1)
         cursor.execute(sql.SQL(
-            "SELECT * FROM winter_data WHERE workout_score > -1.0"), )
+            "SELECT * FROM mischief_data WHERE score > -1.0"), )
         leaderboard = cursor.fetchall()
         leaderboard.sort(key=lambda s: s[6], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
@@ -96,14 +96,14 @@ def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_w
         for x in range(0, len(names)):
             print("starting", names[x])
             cursor.execute(sql.SQL(
-                "SELECT workout_score FROM winter_data WHERE slack_id = %s"), [str(ids[x])])
+                "SELECT score FROM mischief_data WHERE slack_id = %s"), [str(ids[x])])
             score = cursor.fetchall()[0][0]
             score = int(score)
-            if score != -1 and channel_id == "GUF7AMF1Q":
+            if score != -1 and channel_id == "C03UHTL3J58":
                 cursor.execute(sql.SQL("""
-                    UPDATE winter_data SET num_workouts=num_workouts+%s,
+                    UPDATE mischief_data SET num_workouts=num_workouts+%s,
                     num_throws=num_throws+%s, num_cardio=num_cardio+%s, num_gym=num_gym+%s, 
-                    workout_score=workout_score+%s, last_post=now() WHERE slack_id = %s
+                    score=score+%s, last_post=now() WHERE slack_id = %s
                     """),
                     [str(num_workouts), str(throw_num), str(cardio_num), str(gym_num), str(addition), ids[x]])
                 conn.commit()
@@ -138,7 +138,7 @@ def get_req(mention_id):
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL(
-            "SELECT * FROM winter_data WHERE slack_id = %s"), [mention_id[0]])
+            "SELECT * FROM mischief_data WHERE slack_id = %s"), [mention_id[0]])
         entry = cursor.fetchall()
         req_string += '%s requirements fulfilled: %.1d throws; %.1d cardio; %.1d lifts.' % (entry[x][0], entry[x][3], entry[x][4], entry[x][5])
         cursor.close()
@@ -165,7 +165,7 @@ def subtract_from_db(names, subtraction, ids):  # subtract "subtraction" from ea
         cursor = conn.cursor()
         for x in range(0, len(names)):
             cursor.execute(sql.SQL(
-                "UPDATE winter_data SET workout_score = workout_score - %s WHERE slack_id = %s"),
+                "UPDATE mischief_data SET score = score - %s WHERE slack_id = %s"),
                 [subtraction, ids[x]])
             conn.commit()
             send_debug_message("subtracted %s" % names[x])
@@ -194,11 +194,11 @@ def reset_scores():  # reset the scores of everyone
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL("""
-            UPDATE winter_data SET num_workouts = 0, num_throws = 0, num_cardio = 0, 
-            num_gym = 0, workout_score = 0, last_post = now() WHERE workout_score != -1
+            UPDATE mischief_data SET num_workouts = 0, num_throws = 0, num_cardio = 0, 
+            num_gym = 0, score = 0, last_post = now() WHERE score != -1
         """))
         # cursor.execute(sql.SQL(
-        #     "DELETE FROM tribe_workouts"
+        #     "DELETE FROM mischief_data"
         # ))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -224,7 +224,7 @@ def reset_talkative():  # reset the num_posts of everyone
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL(
-            "UPDATE winter_data SET num_posts = 0 WHERE workout_score != -1"))
+            "UPDATE mischief_data SET num_posts = 0 WHERE workout_score != -1"))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(str(error))
@@ -268,7 +268,7 @@ def get_workouts_after_date(date, type, slack_id):
             port=url.port
         )
         # cursor = conn.cursor()
-        # cursor.execute(sql.SQL("SELECT * from tribe_workouts WHERE slack_id=%s and workout_date BETWEEN %s and now() and workout_type=%s"),
+        # cursor.execute(sql.SQL("SELECT * from mischief_data WHERE slack_id=%s and workout_date BETWEEN %s and now() and workout_type=%s"),
         #                [slack_id, date, "!" + type])
         # workouts = cursor.fetchall()
         # conn.commit()
@@ -296,7 +296,7 @@ def get_group_workouts_after_date(date, type):
             port=url.port
         )
         # cursor = conn.cursor()
-        # cursor.execute(sql.SQL("SELECT * from tribe_workouts WHERE workout_date BETWEEN %s and now() and workout_type=%s"),
+        # cursor.execute(sql.SQL("SELECT * from mischief_data WHERE workout_date BETWEEN %s and now() and workout_type=%s"),
         #                [date, "!" + type])
         # workouts = cursor.fetchall()
         # conn.commit()
