@@ -30,7 +30,7 @@ def add_num_posts(mention_id, event_time, name, channel_id):
         if cursor.rowcount == 0 and channel_id == "GUF7AMF1Q":
             cursor.execute(sql.SQL("INSERT INTO winter_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time])
-            send_debug_message("%s is new to Wreck" % name)
+            send_debug_message("%s is new to Mischief" % name)
         conn.commit()
         cursor.close()
         conn.close()
@@ -246,10 +246,6 @@ def add_workout(name, slack_id, workout_type):
             host=url.hostname,
             port=url.port
         )
-        # cursor = conn.cursor()
-        # cursor.execute(sql.SQL("INSERT INTO tribe_workouts VALUES (%s, %s, %s, now())"), [str(name), str(slack_id), str(workout_type)])
-        # conn.commit()
-        # send_debug_message("Committed " + name + " to the workout list")
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(str(error))
     finally:
