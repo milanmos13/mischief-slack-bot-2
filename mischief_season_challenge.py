@@ -130,6 +130,8 @@ class MischiefSlack:
         self._all_avatars = []
         mention_names = []
         info = get_group_info()
+        print("-------DEBUGGING HERE-------")
+        print(get_group_info)
         for id in mention_ids:
             for member in info['members']:
                 if member['id'] == id:
