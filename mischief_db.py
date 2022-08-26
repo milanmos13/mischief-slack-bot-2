@@ -15,6 +15,7 @@ __auth__ = {"Authorization" : "Bearer " + __token__}
 #CREATE TABLE mischief_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, score numeric(4, 1), last_post DATE, slack_id CHAR(9), last_time BIGINT)
 
 def init_db(member_info):
+    print("ATTEMPTING INIT WITH: ", member_info)
     try:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -30,7 +31,7 @@ def init_db(member_info):
             for member in member_info['members']:   
                 cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                                [member['real_name'], member['id'], now()])
-            send_debug_message("%s is new to Mischief" % member['real_name'])
+            send_debug_message("%s is new to Mischief" % name)
         conn.commit()
         cursor.close()
         conn.close()
