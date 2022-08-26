@@ -129,6 +129,7 @@ class MischiefSlack:
         mention_ids = self._all_ids
         self._all_avatars = []
         mention_names = []
+        print("calling get group info")
         info = get_group_info()
         print("-------DEBUGGING HERE-------")
         print(info)

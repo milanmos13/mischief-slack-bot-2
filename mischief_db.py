@@ -67,7 +67,7 @@ def collect_stats(datafield, rev):
         send_debug_message(error)
 
 def get_group_info():
-    print("-------DEBUGGING HERE-------")
+    print("group info called")
     url = "https://slack.com/api/users.list"
     token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
 
