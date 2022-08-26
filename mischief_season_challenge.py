@@ -7,6 +7,7 @@ class MischiefSlack:
     def __init__(self, json_data):
         self._event = json_data['event']
         self._repeat = False
+        self._db_init = False
 
         ## point values
         ## TODO: change from Berry
@@ -129,10 +130,9 @@ class MischiefSlack:
         mention_ids = self._all_ids
         self._all_avatars = []
         mention_names = []
-        print("calling get group info")
         info = get_group_info()
-        print("-------DEBUGGING HERE-------")
-        print(info)
+        if not self._db_init:
+            self._db_init = init_db(info)
         for id in mention_ids:
             for member in info['members']:
                 if member['id'] == id:
@@ -239,6 +239,8 @@ class MischiefSlack:
                 self.like_message(reaction='thumbsdown')
             if 'good bot' in self._lower_text:
                 self.like_message(reaction='blush')
+            if 'bad bot' in self._lower_text:
+                self.like_message(reaction='sob')    
             if 'bread' in self._lower_text:
                 self.like_message(reaction='bread')
                 self.like_message(reaction='moneybag')
