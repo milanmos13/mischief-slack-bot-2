@@ -5,7 +5,6 @@ from datetime import datetime
 
 class MischiefSlack:
     def __init__(self, json_data):
-        print("json data: ", json_data)
         self._event = json_data['event']
         self._repeat = False
 
@@ -254,6 +253,7 @@ class MischiefSlack:
         slack_token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
         sc = SlackClient(slack_token)
         res = sc.api_call("reactions.add", name=reaction, channel=self._channel, timestamp=self._ts)
+        print("response: ", res)
 
     def __repr__(self):
         return str(self.__dict__)
