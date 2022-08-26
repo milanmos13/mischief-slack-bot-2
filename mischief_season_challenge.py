@@ -5,6 +5,7 @@ from datetime import datetime
 
 class MischiefSlack:
     def __init__(self, json_data):
+        print("json data: ", json_data)
         self._event = json_data['event']
         self._repeat = False
 
