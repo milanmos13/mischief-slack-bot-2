@@ -11,10 +11,12 @@ class MischiefSlack:
 
         ## point values
         ## TODO: change from Berry
-        self.GYM_POINTS = 1.0
+        self.WHITE_POINTS = 1.0
+        self.RED_POINTS = 1.0
+        self.BLACK_POINTS = 0.5
         self.THROW_POINTS = 1.0
-        self.CARDIO_POINTS = 1.0
-        self.CHALLENGE_POINTS = 1.0
+        self.REGEN_POINTS = 2.0
+        self.ALTITUDE_POINTS = 0.0
         self._additions = []
         self._reaction_added = False
         self._reaction_removed = False
@@ -149,27 +151,42 @@ class MischiefSlack:
         ## TODO: update point reqs
         #DB reqs added
         self._points_to_add = 0
+        self.red_req_filled = 0
+        self.white_req_filled = 0
+        self.black_req_filled = 0
         self.throw_req_filled = 0
-        self.gym_req_filled = 0
-        self.cardio_req_filled = 0
-        if '!lift' in self._lower_text or '!gym' in self._lower_text:
-            self._points_to_add += self.GYM_POINTS
-            self.gym_req_filled += 1
-            self._additions.append('!gym')
+        self.regen_req_filled = 0
+        self.altitude_req_filled = 0
+        if '!red' in self._lower_text:
+            self._points_to_add += self.RED_POINTS
+            self.red_req_filled += 1
+            self._additions.append('!red')
+        if '!white' in self._lower_text:
+            self._points_to_add += self.WHITE_POINTS
+            self.white_req_filled += 1
+            self._additions.append('!white')
+        if '!black' in self._lower_text:
+            self._points_to_add += self.BLACK_POINTS
+            self.black_req_filled += 1
+            self._additions.append('!black')
         if '!throw' in self._lower_text:
             self._points_to_add += self.THROW_POINTS
             self.throw_req_filled += 1
             self._additions.append('!throw')
-        if '!sprint' in self._lower_text or '!sprints' in self._lower_text:
-            self._points_to_add += self.CARDIO_POINTS
-            self.cardio_req_filled += 1
-            self._additions.append('!cardio')
+        if '!regen' in self._lower_text:
+            self._points_to_add += self.REGEN_POINTS
+            self.regen_req_filled += 1
+            self._additions.append('!regen')
+        if '!altitude' in self._lower_text or '!breathe' in self._lower_text:
+            self._points_to_add += self.ALTITUDE_POINTS
+            self.altitude_req_filled += 1
+            self._additions.append('!altitude')
 
     def handle_db(self):
         #added reqs
         if not self._repeat:
-            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.gym_req_filled,
-            self.throw_req_filled, self.cardio_req_filled, len(self._additions), self._all_ids)
+            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.red_req_filled, self.white_req_filled, self.black_req_filled,
+            self.throw_req_filled, self.regen_req_filled, self.altitude_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
                 for workout in self._additions:
                     add_workout(self._all_names[i], self._all_ids[i], workout)
@@ -186,20 +203,16 @@ class MischiefSlack:
         if not self._repeat:
             ## put the fun stuff here
             if "!help" in self._lower_text:
-                send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!points"
-                                   "\n!gym\n!throw\n!cardio\n!challenge\n",
+                send_tribe_message("Available commands:\n!leaderboard\n!points"
+                                   "\n!red\n!white\n!black\n!throw\n!regen\n!altitude\n!breathe\n!challenge\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
-                send_tribe_message("Point Values:\ngym: %.1f\n throw %.1f\ncardio %.1f\nchallenge %.1f"
-                                   % (self.GYM_POINTS, self.THROW_POINTS, self.CARDIO_POINTS, 
-                                    self.CHALLENGE_POINTS), channel=self._channel)
+                send_tribe_message("Point Values:\nred: %.1f\n white: %.1f\nblack: %.1f\nthrow  %.1f\nregen: %.1f\naltitude/breathe: %.1f\n"
+                                   % (self.RED_POINTS, self.WHITE_POINTS, self.BLACK_POINTS, self.THROW_POINTS, 
+                                    self.REGEN_POINTS, self.ALTITUDE_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
                 to_print = collect_stats(3, True)
-                send_message(to_print, channel=self._channel, bot_name=self._name, url=self._avatar_url)
-            if '!workouts' in self._lower_text:  # display the leaderboard for who works out the most
-                count += 1
-                to_print = collect_stats(2, True)
                 send_message(to_print, channel=self._channel, bot_name=self._name, url=self._avatar_url)
             if '!yummy' in self._lower_text:  # displays the leaderboard for who posts the most
                 count += 1
@@ -247,7 +260,7 @@ class MischiefSlack:
                 self.like_message(reaction='croissant')
                 self.like_message(reaction='100')
             if count >= 1:
-                self.like_message(reaction='sunflower')
+                self.like_message(reaction='mischief-rainbow')
 
     def like_message(self, reaction='robot_face'):
         slack_token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')

@@ -12,11 +12,12 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
     print("event received")
-    ## TODO: change from Berry
-    GYM_POINTS = 1.0
+    WHITE_POINTS = 1.0
+    RED_POINTS = 1.0
+    BLACK_POINTS = 0.5
     THROW_POINTS = 1.0
-    CARDIO_POINTS = 0.5
-    CHALLENGE_POINTS = 1.5
+    REGEN_POINTS = 2.0
+    ALTITUDE_POINTS = 0.0
     BOT_CHANNEL = "C03UHTL3J58"
     data = request.get_json()
     if data['type'] == "url_verification":
