@@ -94,6 +94,8 @@ def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_w
             host=url.hostname,
             port=url.port
         )
+        print("names: ", names)
+        print("ids: ", ids)
         cursor = conn.cursor()
         for x in range(0, len(names)):
             print("starting", names[x])
@@ -116,7 +118,6 @@ def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_w
                 send_debug_message("invalid workout poster found " + names[x])
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(str(error))
-        print("UH OH!!!! SOMETHING HAPPENED ---------------------------------")
     finally:
         if cursor is not None:
             cursor.close()
