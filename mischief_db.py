@@ -9,6 +9,8 @@ from slack_api import *
 from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
+__token__ = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
+__auth__ = {"Authorization" : "Bearer " + __token__}
 
 #CREATE TABLE mischief_data(name text, num_posts SMALLINT, num_workouts SMALLINT, num_throws SMALLINT, num_cardio SMALLINT, num_gym SMALLINT, score numeric(4, 1), last_post DATE, slack_id CHAR(9), last_time BIGINT)
 
@@ -67,23 +69,14 @@ def collect_stats(datafield, rev):
         send_debug_message(error)
 
 def get_group_info():
-    print("group info called")
     url = "https://slack.com/api/users.list"
-    token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
-    auth = {"Authorization" : "Bearer " + token}
-
-    headers = CaseInsensitiveDict()
-    headers["Content-Type"] = "application/x-www-form-urlencoded"
-    resp = requests.post(url, headers=headers, data=token).json()
-    json = requests.get(url, headers=auth).json()
-    print("resp", resp)
-    print("json", json)
+    json = requests.get(url, headers=__auth__).json()
     return json
 
 
 def get_emojis():
-    url = 'https://slack.com/api/emoji.list?token=' + os.getenv('OAUTH_ACCESS_TOKEN')
-    json = requests.get(url).json()
+    url = 'https://slack.com/api/emoji.list'
+    json = requests.get(url, headers=__auth__).json()
     return json
 
 
