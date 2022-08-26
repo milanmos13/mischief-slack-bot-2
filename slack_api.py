@@ -37,7 +37,7 @@ def get_group_info():
     json = requests.get(url, headers=auth).json()
     print("resp", resp)
     print("json", json)
-    return resp
+    return json
 
 
 def get_emojis():
