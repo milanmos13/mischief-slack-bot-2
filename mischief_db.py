@@ -30,14 +30,14 @@ def init_db(member_info):
             for member in member_info['members']:   
                 cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                                [member['real_name'], member['id'], now()])
-            send_debug_message("%s is new to Mischief" % name)
+            send_debug_message("%s is new to Mischief" % member['real_name'])
         conn.commit()
         cursor.close()
         conn.close()
         return True
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(error)
-        return True
+        return False
 
 def add_num_posts(mention_id, event_time, name, channel_id):
     try:
