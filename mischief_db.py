@@ -102,7 +102,6 @@ def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_w
             cursor.execute(sql.SQL(
                 "SELECT score FROM mischief_data WHERE slack_id = %s"), [str(ids[x])])
             print("is this out of range? ", str(ids[x]))
-            print(cursor.fetchall())
             print("first index: ", cursor.fetchall()[0])
             score = cursor.fetchall()[0][0]
             print("we did not get here.", score)
