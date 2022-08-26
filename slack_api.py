@@ -29,6 +29,7 @@ def get_group_info():
     print("group info called")
     url = "https://slack.com/api/users.list"
     token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
+    auth = {"Authorization" : "Bearer " + token}
 
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/x-www-form-urlencoded"
