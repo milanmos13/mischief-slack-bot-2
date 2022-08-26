@@ -69,8 +69,13 @@ def collect_stats(datafield, rev):
 def get_group_info():
     url = "https://slack.com/api/users.list"
     token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
-    auth = {"Authorization": "Bearer " + token}
+
+    headers = CaseInsensitiveDict()
+    headers["Content-Type"] = "application/x-www-form-urlencoded"
+    resp = requests.post(url, headers=headers, data=token).json()
     json = requests.get(url, headers=auth).json()
+    print("resp", resp)
+    print("json", json)
     return json
 
 
