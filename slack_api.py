@@ -1,6 +1,7 @@
 import os
 import requests
 from slackclient import SlackClient
+from requests.structures import CaseInsensitiveDict
 
 
 def send_message(msg, channel="#bot-beta-testing", url='', bot_name='Workout-Bot V.1'):
