@@ -101,6 +101,7 @@ def add_to_db(channel_id, names, addition, gym_num, throw_num, cardio_num, num_w
             print("starting", names[x])
             cursor.execute(sql.SQL(
                 "SELECT score FROM mischief_data WHERE slack_id = %s"), [str(ids[x])])
+            print("is this out of range? ", str(ids[x]))
             score = cursor.fetchall()[0][0]
             score = int(score)
             if score != -1 and channel_id == "C03UHTL3J58":
