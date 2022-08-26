@@ -187,9 +187,7 @@ class MischiefSlack:
             ## put the fun stuff here
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!workouts\n!points"
-                                   "\n!gym\n!throw\n!cardio\n!challenge\n!since [YYYY-MM-DD] [type] [@name]"
-                                   "\n!groupsince [YYYY-MM-DD] [type]"
-                                   "\n \"Title\" \"option 1\" ... \"option n\"",
+                                   "\n!gym\n!throw\n!cardio\n!challenge\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
                 send_tribe_message("Point Values:\ngym: %.1f\n throw %.1f\ncardio %.1f\nchallenge %.1f"
@@ -240,7 +238,7 @@ class MischiefSlack:
             if 'groupme' in self._lower_text or 'ultiworld' in self._lower_text:
                 self.like_message(reaction='thumbsdown')
             if 'good bot' in self._lower_text:
-                self.like_message(reaction='woman-tipping-hand')
+                self.like_message(reaction='blush')
             if 'bread' in self._lower_text:
                 self.like_message(reaction='bread')
                 self.like_message(reaction='moneybag')
