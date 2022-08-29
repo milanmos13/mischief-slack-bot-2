@@ -109,7 +109,7 @@ def get_emojis():
 
 
 def add_to_db(channel_id, names, addition, red_num, white_num, black_num, throw_num, regen_num, altitude_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
-    send_debug_message("atitude num: " + altitude_num)
+    send_debug_message("atitude num: ", altitude_num)
     cursor = None
     conn = None
     num_committed = 0
