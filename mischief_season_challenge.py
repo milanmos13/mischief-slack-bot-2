@@ -178,10 +178,8 @@ class MischiefSlack:
             self.regen_req_filled += 1
             self._additions.append('!regen')
         if '!altitude' in self._lower_text or '!breathe' in self._lower_text or '!breathing' in self._lower_text:
-            send_debug_message("Altitude tracked.")
             self._points_to_add += self.ALTITUDE_POINTS
             self.altitude_req_filled += 1
-            print("new altitude: ", self.altitude_req_filled)
             self._additions.append('!altitude')
 
     def handle_db(self):
