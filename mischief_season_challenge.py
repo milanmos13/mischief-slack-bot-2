@@ -17,6 +17,8 @@ class MischiefSlack:
         self.THROW_POINTS = 1.0
         self.REGEN_POINTS = 2.0
         self.ALTITUDE_POINTS = 0.0
+        # has to be added for init since this is 0 points
+        self.altitude = False
         self._additions = []
         self._reaction_added = False
         self._reaction_removed = False
@@ -181,6 +183,7 @@ class MischiefSlack:
             send_debug_message("Altitude tracked.")
             self._points_to_add += self.ALTITUDE_POINTS
             self.altitude_req_filled += 1
+            self.altitude = True
             self._additions.append('!altitude')
 
     def handle_db(self):

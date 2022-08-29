@@ -33,7 +33,7 @@ def webhook():
         print("not a bot")
         obj.isRepeat()
         obj._repeat = False
-        if obj._points_to_add > 0:
+        if obj._points_to_add > 0 or obj.altitude:
             print("points to add")
             obj.handle_db()
         else:
