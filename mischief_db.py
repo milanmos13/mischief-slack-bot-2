@@ -84,7 +84,7 @@ def collect_stats(datafield, rev):
         cursor.execute(sql.SQL(
             "SELECT * FROM mischief_data WHERE score > -1.0"), )
         leaderboard = cursor.fetchall()
-        leaderboard.sort(key=lambda s: s[6], reverse=rev)  # sort the leaderboard by score descending
+        leaderboard.sort(key=lambda s: s[9], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s on Team %s (Pod %s) with %.1f point(s); %.1d red; %.1d white; %.1d black; %.1d throw(s); %.1d regen; %.1d altitude training. \n' % (x + 1, leaderboard[x][0], 
