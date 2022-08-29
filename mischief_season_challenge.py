@@ -17,8 +17,6 @@ class MischiefSlack:
         self.THROW_POINTS = 1.0
         self.REGEN_POINTS = 2.0
         self.ALTITUDE_POINTS = 0.0
-        # has to be added for init since this is 0 points
-        self.altitude = False
         self._additions = []
         self._reaction_added = False
         self._reaction_removed = False
