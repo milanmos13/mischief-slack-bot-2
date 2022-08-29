@@ -181,7 +181,7 @@ class MischiefSlack:
             send_debug_message("Altitude tracked.")
             self._points_to_add += self.ALTITUDE_POINTS
             self.altitude_req_filled += 1
-            self.altitude = True
+            print("new altitude: ", self.altitude_req_filled)
             self._additions.append('!altitude')
 
     def handle_db(self):
