@@ -11,9 +11,9 @@ class MischiefSlack:
 
         ## point values
         ## TODO: change from Berry
-        self.WHITE_POINTS = 1.0
-        self.RED_POINTS = 1.0
-        self.BLACK_POINTS = 0.5
+        self.WHITE_POINTS = 2.0
+        self.RED_POINTS = 3.0
+        self.BLACK_POINTS = 4.0
         self.THROW_POINTS = 1.0
         self.REGEN_POINTS = 2.0
         self.ALTITUDE_POINTS = 0.0

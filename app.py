@@ -12,9 +12,9 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
     print("event received")
-    WHITE_POINTS = 1.0
-    RED_POINTS = 1.0
-    BLACK_POINTS = 0.5
+    WHITE_POINTS = 2.0
+    RED_POINTS = 3.0
+    BLACK_POINTS = 4.0
     THROW_POINTS = 1.0
     REGEN_POINTS = 2.0
     ALTITUDE_POINTS = 0.0
