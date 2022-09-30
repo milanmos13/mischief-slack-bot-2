@@ -217,7 +217,7 @@ class MischiefSlack:
             ## put the fun stuff here
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!points"
-                                   "\n!lift\n!cardio\n!throw\n!regen\n!play\n!compete\n!halloween\n!soup\n",
+                                   "\n!lift\n!cardio\n!throw\n!regen/!yoga/!stretch\n!play/!goalty/!mini/!tryouts\n!compete\n!halloween\n!soup\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
                 send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nthrow: %.1f\nregen  %.1f\nplay: %.1f\ncompete: %.1f\nhalloween: %.1f\nsoup:%.1f\n"
