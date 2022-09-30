@@ -10,13 +10,14 @@ class MischiefSlack:
         self._db_init = False
 
         ## point values
-        ## TODO: change from Berry
-        self.WHITE_POINTS = 2.0
-        self.RED_POINTS = 3.0
-        self.BLACK_POINTS = 4.0
+        self.LIFT_POINTS = 2.0
+        self.CARDIO_POINTS = 1.0
         self.THROW_POINTS = 1.0
-        self.REGEN_POINTS = 2.0
-        self.ALTITUDE_POINTS = 0.0
+        self.REGEN_POINTS = 1.5
+        self.PLAY_POINTS = 3.0
+        self.COMPETE_POINTS = 3.0
+        self.HALLOWEEN_POINTS = 2.0
+        self.SOUP_POINTS = 1.0
         self._additions = []
         self._reaction_added = False
         self._reaction_removed = False
@@ -151,42 +152,54 @@ class MischiefSlack:
         ## TODO: update point reqs
         #DB reqs added
         self._points_to_add = 0
-        self.red_req_filled = 0
-        self.white_req_filled = 0
-        self.black_req_filled = 0
+        self.lift_req_filled = 0
+        self.cardio_req_filled = 0
         self.throw_req_filled = 0
         self.regen_req_filled = 0
-        self.altitude_req_filled = 0
-        if '!red' in self._lower_text:
-            self._points_to_add += self.RED_POINTS
-            self.red_req_filled += 1
-            self._additions.append('!red')
-        if '!white' in self._lower_text:
-            self._points_to_add += self.WHITE_POINTS
-            self.white_req_filled += 1
-            self._additions.append('!white')
-        if '!black' in self._lower_text:
-            self._points_to_add += self.BLACK_POINTS
-            self.black_req_filled += 1
-            self._additions.append('!black')
+        self.play_req_filled = 0
+        self.compete_req_filled = 0
+        self.halloween_req_filled = 0
+        self.soup_req_filled = 0
+        self._req_filled = 0
+        if '!lift' in self._lower_text:
+            self._points_to_add += self.LIFT_POINTS
+            self.lift_req_filled += 1
+            self._additions.append('!lift')
+        if '!cardio' in self._lower_text:
+            self._points_to_add += self.CARDIO_POINTS
+            self.cardio_req_filled += 1
+            self._additions.append('!cardio')
         if '!throw' in self._lower_text:
             self._points_to_add += self.THROW_POINTS
             self.throw_req_filled += 1
             self._additions.append('!throw')
-        if '!regen' in self._lower_text:
+        if '!regen' in self._lower_text or '!yoga' in self._lower_text or '!stretch' in self._lower_text:
             self._points_to_add += self.REGEN_POINTS
             self.regen_req_filled += 1
             self._additions.append('!regen')
-        if '!altitude' in self._lower_text or '!breathe' in self._lower_text or '!breathing' in self._lower_text:
-            self._points_to_add += self.ALTITUDE_POINTS
-            self.altitude_req_filled += 1
-            self._additions.append('!altitude')
+        if '!goalty' in self._lower_text or '!mini' in self._lower_text or '!tryouts' in self._lower_text or '!play' in self._lower_text:
+            self._points_to_add += self.PLAY_POINTS
+            self.play_req_filled += 1
+            self._additions.append('!play')
+        if '!compete' in self._lower_text:
+            self._points_to_add += self.COMPETE_POINTS
+            self.compete_req_filled += 1
+            self._additions.append('!compete')
+        if '!halloween' in self._lower_text:
+            self._points_to_add += self.HALLOWEEN_POINTS
+            self.halloween_req_filled += 1
+            self._additions.append('!halloween')
+        if '!soup' in self._lower_text:
+            self._points_to_add += self.SOUP_POINTS
+            self.soup_req_filled += 1
+            self._additions.append('!soup')
 
     def handle_db(self):
         #added reqs
         if not self._repeat:
-            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.red_req_filled, self.white_req_filled, self.black_req_filled,
-            self.throw_req_filled, self.regen_req_filled, self.altitude_req_filled, len(self._additions), self._all_ids)
+            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.lift_req_filled, self.cardio_req_filled, self.throw_req_filled,
+            self.regen_req_filled, self.play_req_filled, self.compete_req_filled, self.halloween_req_filled, self.soup_req_filled, 
+            len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
                 for workout in self._additions:
                     add_workout(self._all_names[i], self._all_ids[i], workout)
@@ -204,12 +217,12 @@ class MischiefSlack:
             ## put the fun stuff here
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!points"
-                                   "\n!red\n!white\n!black\n!throw\n!regen\n!altitude\n!breathe\n!challenge\n",
+                                   "\n!lift\n!cardio\n!throw\n!regen\n!play\n!compete\n!halloween\n!soup\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
-                send_tribe_message("Point Values:\nred: %.1f\n white: %.1f\nblack: %.1f\nthrow  %.1f\nregen: %.1f\naltitude/breathe: %.1f\n"
-                                   % (self.RED_POINTS, self.WHITE_POINTS, self.BLACK_POINTS, self.THROW_POINTS, 
-                                    self.REGEN_POINTS, self.ALTITUDE_POINTS), channel=self._channel)
+                send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nthrow: %.1f\nregen  %.1f\nplay: %.1f\ncompete: %.1f\nhalloween: %.1f\nsoup:%.1f\n"
+                                   % (self.LIFT_POINTS, self.CARDIO_POINTS, self.THROW_POINTS, self.REGEN_POINTS, 
+                                    self.PLAY_POINTS, self.COMPETE_POINTS, self.HALLOWEEN_POINTS, self.SOUP_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
                 to_print = collect_stats(3, True)
@@ -263,7 +276,13 @@ class MischiefSlack:
                 self.like_message(reaction='poultry_leg')
                 send_tribe_message("Pingüino !!", channel=self._channel, bot_name="tracker")    
             if 'sloop' in self._lower_text:
-                self.like_message(reaction='crown')  
+                self.like_message(reaction='crown')
+            if '!halloween' in self._lower_text:
+                self.like_message(reaction='jack_o_lantern')
+            if 'brabara' in self._lower_text:
+                self.like_message(reaction='stache') 
+            if 'spoopy' in self._lower_text or 'boo' in self._lower_text:
+                self.like_message(reaction='ghost')    
             if count >= 1:
                 self.like_message(reaction='mischief-rainbow')
 

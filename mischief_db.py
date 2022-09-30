@@ -30,7 +30,7 @@ def init_db(member_info):
         cursor = conn.cursor()
         if cursor.rowcount == 0 and channel_id == "C03UHTL3J58":
             for member in member_info['members']:   
-                cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
+                cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, now())"),
                                [member['real_name'], member['id'], now()])
             send_debug_message("%s is new to Mischief" % name)
         conn.commit()
@@ -57,7 +57,7 @@ def add_num_posts(mention_id, event_time, name, channel_id):
             "UPDATE mischief_data SET num_posts=num_posts+1 WHERE slack_id = %s"),
             [mention_id[0]])
         if cursor.rowcount == 0 and channel_id == "C03UHTL3J58":
-            cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, 0, 0, 0, now(), %s, %s, %s, %s)"),
+            cursor.execute(sql.SQL("INSERT INTO mischief_data VALUES (%s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, now(), %s, %s)"),
                            [name, mention_id[0], event_time, name, name])
             send_debug_message("%s is new to Mischief" % name)
         conn.commit()
@@ -87,9 +87,9 @@ def collect_stats(datafield, rev):
         leaderboard.sort(key=lambda s: s[9], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
-            string1 += '%d) %s on Team %s (Pod %s) with %.1f point(s); %.1d red; %.1d white; %.1d black; %.1d throw(s); %.1d regen; %.1d altitude training. \n' % (x + 1, leaderboard[x][0], 
-                leaderboard[x][14], leaderboard[x][13], leaderboard[x][9], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5],
-                leaderboard[x][6], leaderboard[x][7], leaderboard[x][8])
+            string1 += '%d) %s with %.1f point(s); %.1d lift(s); %.1d cardio; %.1d throw(s); %.1d regen; %.1d goalty/mini/tryouts; %.1d compete; %.1d halloween; %.1d, soup; %.1d  \n' % (x + 1, leaderboard[x][0], 
+                leaderboard[x][11], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5],
+                leaderboard[x][6], leaderboard[x][7], leaderboard[x][8], leaderboard[x][9], leaderboard[x][10])
         cursor.close()
         conn.close()
         return string1
@@ -108,7 +108,7 @@ def get_emojis():
     return json
 
 
-def add_to_db(channel_id, names, addition, red_num, white_num, black_num, throw_num, regen_num, altitude_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
+def add_to_db(channel_id, names, addition, lift_num, cardio_num, throw_num, regen_num, play_num, compete_num, halloween_num, soup_num, num_workouts, ids):  # add "addition" to each of the "names" in the db
     cursor = None
     conn = None
     num_committed = 0
@@ -134,11 +134,12 @@ def add_to_db(channel_id, names, addition, red_num, white_num, black_num, throw_
             if score != -1:
                 cursor.execute(sql.SQL("""
                     UPDATE mischief_data SET num_workouts=num_workouts+%s,
-                    num_red=num_red+%s, num_white=num_white+%s, num_black=num_black+%s, num_throw=num_throw+%s, 
-                    num_regen=num_regen+%s, num_altitude=num_altitude+%s,
+                    num_lifts=num_lifts+%s, num_cardio=num_cardio+%s, num_throws=num_throws+%s, num_regen=num_regen+%s, 
+                    num_play=num_play+%s, num_compete=num_compete+%s, num_halloween=num_halloween+%s, num_soup=num_soup+%s,
                     score=score+%s, last_post=now() WHERE slack_id = %s
                     """),
-                    [str(num_workouts), str(red_num), str(white_num), str(black_num), str(throw_num), str(regen_num), str(altitude_num), str(addition), ids[x]])
+                    [str(num_workouts), str(lift_num), str(cardio_num), str(throw_num), str(regen_num), str(play_num), str(compete_num), str(halloween_num),
+                     str(soup_num), str(addition), ids[x]])
                 conn.commit()
                 send_debug_message("committed %s with %s points" % (names[x], str(addition)))
                 print("committed %s" % names[x])
@@ -152,33 +153,6 @@ def add_to_db(channel_id, names, addition, red_num, white_num, black_num, throw_
             cursor.close()
             conn.close()
         return num_committed
-
-
-def get_mental_req(mention_id):
-    cursor = None
-    conn = None
-    req_string = ""
-    try:
-        urllib.parse.uses_netloc.append("postgres")
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        cursor = conn.cursor()
-        cursor.execute(sql.SQL(
-            "SELECT * FROM mischief_data WHERE slack_id = %s"), [mention_id[0]])
-        entry = cursor.fetchall()
-        req_string += '%s requirements fulfilled: %.1d red; %.1d black; %.1d white.' % (entry[x][0], entry[x][3], entry[x][4], entry[x][5])
-        cursor.close()
-        conn.close()
-        return req_string
-    except (Exception, psycopg2.DatabaseError) as error:
-        send_debug_message(error)
 
 
 def subtract_from_db(names, subtraction, ids):  # subtract "subtraction" from each of the "names" in the db
@@ -227,8 +201,8 @@ def reset_scores():  # reset the scores of everyone
         )
         cursor = conn.cursor()
         cursor.execute(sql.SQL("""
-            UPDATE mischief_data SET num_workouts = 0, num_red = 0, num_white = 0, num_black = 0, num_throw = 0, 
-            num_regen = 0, num_altitude = 0, score = 0, last_post = now() WHERE score != -1
+            UPDATE mischief_data SET num_workouts = 0, num_lifts = 0, num_cardio = 0, num_throws = 0, num_regen = 0, num_play = 0, 
+            num_compete = 0, num_halloween = 0, num_soup = 0, score = 0, last_post = now() WHERE score != -1
         """))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
