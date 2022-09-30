@@ -277,14 +277,12 @@ class MischiefSlack:
                 send_tribe_message("Pingüino !!", channel=self._channel, bot_name="tracker")    
             if 'sloop' in self._lower_text:
                 self.like_message(reaction='crown')
-            if '!halloween' in self._lower_text:
-                self.like_message(reaction='jack_o_lantern')
             if 'brabara' in self._lower_text:
                 self.like_message(reaction='stache') 
             if 'spoopy' in self._lower_text or 'boo' in self._lower_text:
                 self.like_message(reaction='ghost')    
             if count >= 1:
-                self.like_message(reaction='mischief-rainbow')
+                self.like_message(reaction='jack_o_lantern')
 
     def like_message(self, reaction='robot_face'):
         slack_token = os.getenv('BOT_OAUTH_ACCESS_TOKEN')
