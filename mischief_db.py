@@ -87,9 +87,9 @@ def collect_stats(datafield, rev):
         leaderboard.sort(key=lambda s: s[9], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
-            string1 += '%d) %s with %.1f point(s); %.1d lift(s); %.1d cardio; %.1d throw(s); %.1d regen; %.1d goalty/mini/tryouts; %.1d compete; %.1d halloween; %.1d, soup; %.1d  \n' % (x + 1, leaderboard[x][0], 
-                leaderboard[x][11], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5],
-                leaderboard[x][6], leaderboard[x][7], leaderboard[x][8], leaderboard[x][9], leaderboard[x][10])
+            string1 += '%d) %s with %.1f point(s); %.1d lift(s); %.1d cardio; %.1d throw(s); %.1d regen; %.1d goalty/mini/tryouts; %.1d compete; %.1d halloween; %.1d soup. \n' % (x + 1, leaderboard[x][0], 
+                leaderboard[x][11], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5], leaderboard[x][6],
+                leaderboard[x][7], leaderboard[x][8], leaderboard[x][9], leaderboard[x][10])
         cursor.close()
         conn.close()
         return string1
