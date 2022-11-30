@@ -225,6 +225,10 @@ class MischiefSlack:
                                     self.PLAY_POINTS, self.COMPETE_POINTS, self.HALLOWEEN_POINTS, self.SOUP_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
+                to_print = collect_leaderboard(3, True)
+                send_message(to_print, channel=self._channel, bot_name=self._name, url=self._avatar_url)
+            if "!stats" in self._lower_text:
+                count += 1
                 to_print = collect_stats(3, True)
                 send_message(to_print, channel=self._channel, bot_name=self._name, url=self._avatar_url)
             if '!yummy' in self._lower_text:  # displays the leaderboard for who posts the most

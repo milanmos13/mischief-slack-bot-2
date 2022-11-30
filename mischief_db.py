@@ -80,9 +80,9 @@ def collect_stats(datafield, rev):
             port=url.port
         )
         cursor = conn.cursor()
-        # get all of the people whose scores are greater than -1 (any non players have a workout score of -1)
+        # get all of the people whose scores are greater than 0 (any non players have a workout score of -1; anyone participating will eventually have score over 0)
         cursor.execute(sql.SQL(
-            "SELECT * FROM mischief_data WHERE score > -1.0"), )
+            "SELECT * FROM mischief_data WHERE score > 0"), )
         leaderboard = cursor.fetchall()
         leaderboard.sort(key=lambda s: s[11], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
@@ -95,6 +95,33 @@ def collect_stats(datafield, rev):
         return string1
     except (Exception, psycopg2.DatabaseError) as error:
         send_debug_message(error)
+
+def collect_leaderboard(datafield, rev):
+    try:
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+        conn = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        cursor = conn.cursor()
+        # get all of the people whose scores are greater than 0 (any non players have a workout score of -1; anyone participating will eventually have score over 0)
+        cursor.execute(sql.SQL(
+            "SELECT * FROM mischief_data WHERE score > 0"), )
+        leaderboard = cursor.fetchall()
+        leaderboard.sort(key=lambda s: s[11], reverse=rev)  # sort the leaderboard by score descending
+        string1 = "Leaderboard:\n"
+        for x in range(0, len(leaderboard)):
+            string1 += '%d) %s with %.1f point(s)\n' % (x + 1, leaderboard[x][0], 
+                leaderboard[x][11])
+        cursor.close()
+        conn.close()
+        return string1
+    except (Exception, psycopg2.DatabaseError) as error:
+        send_debug_message(error)        
 
 def get_group_info():
     url = "https://slack.com/api/users.list"
