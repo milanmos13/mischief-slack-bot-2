@@ -71,9 +71,9 @@ def add_num_posts(mention_id, event_time, name, channel_id):
 def collect_stats(datafield, rev):
     try:
         conn = psycopg2.connect(
-            database=os.environ["DB_NAME"],
-            user=os.environ["DB_USER"],
-            password=os.environ["DB_PASSWORD"],
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
             host=url.hostname
         )
         cursor = conn.cursor()
