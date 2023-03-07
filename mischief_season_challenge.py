@@ -12,12 +12,11 @@ class MischiefSlack:
         ## point values
         self.LIFT_POINTS = 2.0
         self.CARDIO_POINTS = 1.0
+        self.SPRINT_POINTS = 2.0
         self.THROW_POINTS = 1.0
         self.REGEN_POINTS = 1.5
         self.PLAY_POINTS = 3.0
-        self.COMPETE_POINTS = 3.0
-        self.HALLOWEEN_POINTS = 2.0
-        self.SOUP_POINTS = 1.0
+        self.VOLUNTEER_POINTS = 3.0
         self._additions = []
         self._reaction_added = False
         self._reaction_removed = False
@@ -154,12 +153,11 @@ class MischiefSlack:
         self._points_to_add = 0
         self.lift_req_filled = 0
         self.cardio_req_filled = 0
+        self.sprint_req_filled = 0
         self.throw_req_filled = 0
         self.regen_req_filled = 0
         self.play_req_filled = 0
-        self.compete_req_filled = 0
-        self.halloween_req_filled = 0
-        self.soup_req_filled = 0
+        self.volunteer_req_filled = 0
         self._req_filled = 0
         if '!lift' in self._lower_text:
             self._points_to_add += self.LIFT_POINTS
@@ -169,6 +167,10 @@ class MischiefSlack:
             self._points_to_add += self.CARDIO_POINTS
             self.cardio_req_filled += 1
             self._additions.append('!cardio')
+        if '!sprint' in self._lower_text:
+            self._points_to_add += self.SPRINT_POINTS
+            self.sprint_req_filled += 1
+            self._additions.append('!sprint')            
         if '!throw' in self._lower_text:
             self._points_to_add += self.THROW_POINTS
             self.throw_req_filled += 1
@@ -181,25 +183,16 @@ class MischiefSlack:
             self._points_to_add += self.PLAY_POINTS
             self.play_req_filled += 1
             self._additions.append('!play')
-        if '!compete' in self._lower_text:
-            self._points_to_add += self.COMPETE_POINTS
-            self.compete_req_filled += 1
-            self._additions.append('!compete')
-        if '!halloween' in self._lower_text:
-            self._points_to_add += self.HALLOWEEN_POINTS
-            self.halloween_req_filled += 1
-            self._additions.append('!halloween')
-        if '!soup' in self._lower_text:
-            self._points_to_add += self.SOUP_POINTS
-            self.soup_req_filled += 1
-            self._additions.append('!soup')
+        if '!volunteer' in self._lower_text:
+            self._points_to_add += self.VOLUNTEER_POINTS
+            self.volunteer_req_filled += 1
+            self._additions.append('!volunteer')
 
     def handle_db(self):
         #added reqs
         if not self._repeat:
-            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.lift_req_filled, self.cardio_req_filled, self.throw_req_filled,
-            self.regen_req_filled, self.play_req_filled, self.compete_req_filled, self.halloween_req_filled, self.soup_req_filled, 
-            len(self._additions), self._all_ids)
+            num = add_to_db(self._channel, self._all_names, self._points_to_add, self.lift_req_filled, self.cardio_req_filled, self.sprint_req_filled,
+                self.throw_req_filled, self.regen_req_filled, self.play_req_filled, self.volunteer_req_filled, len(self._additions), self._all_ids)
             for i in range(len(self._all_names)):
                 for workout in self._additions:
                     add_workout(self._all_names[i], self._all_ids[i], workout)
@@ -279,6 +272,10 @@ class MischiefSlack:
             if 'pollo' in self._lower_text:
                 self.like_message(reaction='poultry_leg')
                 send_tribe_message("Pingüino !!", channel=self._channel, bot_name="tracker")    
+            if 'welcome bot' in self._lower_text and self._user_id == 'U03MGMXE5U6':
+                self.like_message(reaction='crown')
+                send_tribe_message("it's botney bitch", channel=self._channel, bot_name="tracker")  
+                count += 1    
             if 'sloop' in self._lower_text:
                 self.like_message(reaction='crown')
             if 'brabara' in self._lower_text:
