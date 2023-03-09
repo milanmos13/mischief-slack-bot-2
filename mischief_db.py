@@ -158,7 +158,7 @@ def add_to_db(channel_id, names, addition, lift_num, cardio_num, sprint_num, thr
             if score != -1:
                 cursor.execute(sql.SQL("""
                     UPDATE mischief_data SET num_workouts=num_workouts+%s,
-                    num_lifts=num_lifts+%s, num_cardio=num_cardio+%s, num_sprints=num_sprints+%s num_throws=num_throws+%s, num_regen=num_regen+%s, 
+                    num_lifts=num_lifts+%s, num_cardio=num_cardio+%s, num_sprints=num_sprints+%s, num_throws=num_throws+%s, num_regen=num_regen+%s, 
                     num_play=num_play+%s, num_volunteer=num_volunteer+%s,
                     score=score+%s, last_post=now() WHERE slack_id = %s
                     """),
