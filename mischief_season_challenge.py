@@ -175,7 +175,7 @@ class MischiefSlack:
             self._points_to_add += self.THROW_POINTS
             self.throw_req_filled += 1
             self._additions.append('!throw')
-        if '!regen' in self._lower_text or '!yoga' in self._lower_text or '!stretch' in self._lower_text:
+        if '!regen' in self._lower_text or '!yoga' in self._lower_text or '!stretch' in self._lower_text or '!pt' in self._lower_text:
             self._points_to_add += self.REGEN_POINTS
             self.regen_req_filled += 1
             self._additions.append('!regen')
@@ -210,12 +210,12 @@ class MischiefSlack:
             ## put the fun stuff here
             if "!help" in self._lower_text:
                 send_tribe_message("Available commands:\n!leaderboard\n!points"
-                                   "\n!lift\n!cardio\n!throw\n!regen/!yoga/!stretch\n!play/!goalty/!mini/!tryouts\n!compete\n!halloween\n!soup\n",
+                                   "\n!lift\n!cardio\n!sprint\n!throw\n!regen/!yoga/!stretch/!pt\n!play/!goalty/!mini/!tryouts\n!volunteer\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
-                send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nthrow: %.1f\nregen  %.1f\nplay: %.1f\ncompete: %.1f\nhalloween: %.1f\nsoup:%.1f\n"
-                                   % (self.LIFT_POINTS, self.CARDIO_POINTS, self.THROW_POINTS, self.REGEN_POINTS, 
-                                    self.PLAY_POINTS, self.COMPETE_POINTS, self.HALLOWEEN_POINTS, self.SOUP_POINTS), channel=self._channel)
+                send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nsprint: %.1f\nthrow: %.1f\nregen  %.1f\nplay: %.1f\volunteer: %.1f\n"
+                                   % (self.LIFT_POINTS, self.CARDIO_POINTS, self.SPRINT_POINTS self.THROW_POINTS, self.REGEN_POINTS, 
+                                    self.PLAY_POINTS, self.VOLUNTEER_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
                 count += 1
                 to_print = collect_leaderboard(3, True)
