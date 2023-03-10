@@ -213,7 +213,7 @@ class MischiefSlack:
                                    "\n!lift\n!cardio\n!sprint\n!throw\n!regen/!yoga/!stretch/!pt\n!play/!goalty/!mini/!tryouts\n!volunteer\n",
                                    channel=self._channel, bot_name="tracker")
             if "!points" in self._lower_text:
-                send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nsprint: %.1f\nthrow: %.1f\nregen: %.1f\nplay: %.1f\volunteer: %.1f\n"
+                send_tribe_message("Point Values:\nlift: %.1f\n cardio: %.1f\nsprint: %.1f\nthrow: %.1f\nregen: %.1f\nplay: %.1f\nvolunteer: %.1f\n"
                                    % (self.LIFT_POINTS, self.CARDIO_POINTS, self.SPRINT_POINTS, self.THROW_POINTS, self.REGEN_POINTS, 
                                     self.PLAY_POINTS, self.VOLUNTEER_POINTS), channel=self._channel)
             if "!leaderboard" in self._lower_text:
