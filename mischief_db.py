@@ -70,11 +70,14 @@ def add_num_posts(mention_id, event_time, name, channel_id):
 
 def collect_stats(datafield, rev):
     try:
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
         conn = psycopg2.connect(
-            database=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=url.hostname
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
         )
         cursor = conn.cursor()
         # get all of the people whose scores are greater than 0 (any non players have a workout score of -1; anyone participating will eventually have score over 0)
@@ -113,7 +116,7 @@ def collect_leaderboard(datafield, rev):
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f point(s)\n' % (x + 1, leaderboard[x][0], 
-                leaderboard[x][11])
+                leaderboard[x][10])
         cursor.close()
         conn.close()
         return string1
