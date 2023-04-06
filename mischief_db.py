@@ -112,7 +112,7 @@ def collect_leaderboard(datafield, rev):
         cursor.execute(sql.SQL(
             "SELECT * FROM mischief_data WHERE score > 0"), )
         leaderboard = cursor.fetchall()
-        leaderboard.sort(key=lambda s: s[11], reverse=rev)  # sort the leaderboard by score descending
+        leaderboard.sort(key=lambda s: s[10], reverse=rev)  # sort the leaderboard by score descending
         string1 = "Leaderboard:\n"
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f point(s)\n' % (x + 1, leaderboard[x][0], 
