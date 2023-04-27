@@ -89,7 +89,7 @@ def collect_stats(datafield, rev):
         for x in range(0, len(leaderboard)):
             string1 += '%d) %s with %.1f point(s); %.1d lift(s); %.1d cardio; %.1d sprints; %.1d throw(s); %.1d regen; %.1d goalty/mini/tryouts; %.1d volunteer. \n' % (x + 1, leaderboard[x][0], 
                 leaderboard[x][10], leaderboard[x][3], leaderboard[x][4], leaderboard[x][5], leaderboard[x][6],
-                leaderboard[x][7], leaderboard[x][8], leaderboard[x][9], leaderboard[x][10])
+                leaderboard[x][7], leaderboard[x][8], leaderboard[x][9])
         cursor.close()
         conn.close()
         return string1
