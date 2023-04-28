@@ -269,6 +269,8 @@ class MischiefSlack:
                 self.like_message(reaction='moneybag')
                 self.like_message(reaction='croissant')
                 self.like_message(reaction='100')
+            if 'nate' in self._lower_text:
+                self.like_message(reaction='male_mage')
             if 'pollo' in self._lower_text:
                 self.like_message(reaction='poultry_leg')
                 send_tribe_message("Pingüino !!", channel=self._channel, bot_name="tracker")    
