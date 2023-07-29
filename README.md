@@ -1,4 +1,5 @@
 # Mischief Tracking Bot
+This is developed off of the original from https://github.com/samloop/mischief-slack-bot 
 A variation of the tribe-workout-bots repo. Done on Render since Heroku removed their free tier for PostGre.
 
 ## Deploying on Render
